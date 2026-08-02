@@ -68,6 +68,7 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 # 🚀 Featured Projects
 
+- 🐙 Scout - Smart Commerce & Omnichannel Unified Tracker
 - 🎬 Content-Based Movie Recommendation System
 - 💬 ConversaAI — Neural Network Chatbot
 - 📈 Stock Market Prediction
