@@ -30,6 +30,8 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 <img src="https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/>
 </p>
 
+---
+
 # 🤖 AI / Machine Learning
 
 <p>
@@ -38,6 +40,8 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 <img src="https://img.shields.io/badge/Generative%20AI-7B1FA2?style=for-the-badge"/>
 <img src="https://img.shields.io/badge/Reinforcement%20Learning-009688?style=for-the-badge"/>
 </p>
+
+---
 
 # ⚙️ Frameworks & Libraries
 
@@ -53,6 +57,8 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 <img src="https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy"/>
 <img src="https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge"/>
 </p>
+
+---
 
 # 🛠 Tools
 
@@ -100,15 +106,23 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 <p align="center">
 
-<img height="170em" src="https://github-readme-stats.vercel.app/api?username=granthx&show_icons=true&theme=tokyonight"/>
+<img
+  height="170"
+  src="https://github-readme-stats.vercel.app/api?username=granthx&show_icons=true&theme=tokyonight&hide_border=true&cache_seconds=86400"
+/>
 
-<img height="170em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=granthx&layout=compact&theme=tokyonight"/>
+<img
+  height="170"
+  src="https://github-readme-stats.vercel.app/api/top-langs/?username=granthx&layout=compact&theme=tokyonight&hide_border=true&cache_seconds=86400"
+/>
 
 </p>
 
 <p align="center">
 
-<img src="https://github-readme-streak-stats.herokuapp.com/?user=granthx&theme=tokyonight"/>
+<img
+  src="https://streak-stats.demolab.com/?user=granthx&theme=tokyonight&hide_border=true"
+/>
 
 </p>
 
@@ -117,8 +131,13 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 # 📫 Connect With Me
 
 <p>
-<a href="https://www.linkedin.com/in/granthchhabra">LinkedIn</a> •
-<a href="mailto:chhabragranth729@gmail.com">Email</a>
+  <a href="https://www.linkedin.com/in/granth-chhabra-8915a9377/">
+    LinkedIn
+  </a>
+  •
+  <a href="mailto:chhabragranth729@gmail.com">
+    Email
+  </a>
 </p>
 
 ---
