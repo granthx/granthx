@@ -12,13 +12,13 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 ---
 
-# 👨‍💻 About Me
+#  About Me
 
-- 🎓 B.Tech Computer Science Engineering Student
-- 🤖 Passionate about Artificial Intelligence, Machine Learning and Generative AI
-- 🧠 Exploring Agentic AI, LLMs and Retrieval-Augmented Generation (RAG)
-- 🚀 Love building projects that solve real-world problems
-- 🌱 Currently learning advanced LangGraph, AI evaluation and production AI systems
+-  B.Tech Computer Science Engineering Student
+-  Passionate about Artificial Intelligence, Machine Learning and Generative AI
+-  Exploring Agentic AI, LLMs and Retrieval-Augmented Generation (RAG)
+-  Love building projects that solve real-world problems
+-  Currently learning advanced LangGraph, AI evaluation and production AI systems
 
 ---
 
@@ -33,7 +33,7 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 ---
 
-# 💻 Languages
+#  Languages
 
 <p>
   <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
@@ -43,7 +43,7 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 ---
 
-# 🤖 AI / Machine Learning
+#  AI / Machine Learning
 
 <p>
   <img src="https://img.shields.io/badge/Machine%20Learning-FF6F00?style=for-the-badge" alt="Machine Learning"/>
@@ -54,7 +54,7 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 ---
 
-# ⚙️ Frameworks & Libraries
+#  Frameworks & Libraries
 
 <p>
   <img src="https://img.shields.io/badge/LangChain-121212?style=for-the-badge" alt="LangChain"/>
@@ -71,7 +71,7 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 ---
 
-# 🛠 Tools
+#  Tools
 
 <p>
   <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git"/>
@@ -83,7 +83,7 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 ---
 
-# 🚀 Featured Projects
+#  Featured Projects
 
 - 🐙 **Scout** — Smart Commerce & Omnichannel Unified Tracker
 - 🎬 **Content-Based Movie Recommendation System**
@@ -124,7 +124,7 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 
 ---
 
-# 📫 Connect With Me
+#  Connect With Me
 
 <p>
   <a href="https://www.linkedin.com/in/granth-chhabra-8915a9377/">
