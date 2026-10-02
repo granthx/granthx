@@ -1,7 +1,7 @@
 <h1 align="center">Hi 👋, I'm Granth Chhabra</h1>
 
 <h3 align="center">
-Computer Science Engineering Student • AI & Machine Learning Reseacher • Building Intelligent Applications
+CS Sophomore • AI & Machine Learning Reseacher • Building Intelligent Applications
 </h3>
 
 <p align="center">
