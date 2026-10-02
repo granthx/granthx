@@ -130,6 +130,8 @@ Computer Science Engineering Student • AI & Machine Learning Reseacher • Bui
 
 #  Featured Projects
 
+- 🛰️ **SATQUERY-AI** — Developed a multimodal vision-language assistant
+- 🛒 **KIRANAMATE** — Built an autonomous AI business assistant for Indian Kirana stores
 - 🐙 **Scout** — Smart Commerce & Omnichannel Unified Tracker
 - 🎬 **Content-Based Movie Recommendation System**
 - 💬 **ConversaAI** — Neural Network Chatbot
