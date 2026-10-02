@@ -16,7 +16,7 @@ Computer Science Engineering Student • AI & Machine Learning Reseacher • Bui
 
 -  B.Tech Computer Science Engineering Student
 -  building at the intersection of AI research and software engineering
--  Diving deeper into Agentic AI, AI Engineering & Autonomous LLM Systems
+-  Diving deeper into Agentic AI,LLM Orchestration & Autonomous Systems
 -  Love building projects that solve real-world problems
 -  Currently learning advanced LangGraph, AI evaluation and production AI systems
 
