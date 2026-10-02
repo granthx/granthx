@@ -160,17 +160,6 @@ CS Sophomore • AI & Machine Learning Reseacher • Building Intelligent Applic
 
 ---
 
-# 📊 GitHub Stats
-
-<p align="center">
-  <img
-    src="https://streak-stats.demolab.com/?user=granthx&theme=tokyonight&hide_border=true"
-    alt="GitHub Streak"
-  />
-</p>
-
----
-
 #  Connect With Me
 
 <p>
@@ -180,6 +169,10 @@ CS Sophomore • AI & Machine Learning Reseacher • Building Intelligent Applic
   •
   <a href="mailto:chhabragranth729@gmail.com">
     📧 Email
+  </a>
+  •
+  <a href="https://www.instagram.com/granthchhabraa/">
+    📸 Instagram
   </a>
 </p>
 
