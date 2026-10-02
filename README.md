@@ -1,7 +1,7 @@
 <h1 align="center">Hi 👋, I'm Granth Chhabra</h1>
 
 <h3 align="center">
-Computer Science Engineering Student • AI & Machine Learning Enthusiast • Building Intelligent Applications
+Computer Science Engineering Student • AI & Machine Learning Reseacher • Building Intelligent Applications
 </h3>
 
 <p align="center">
@@ -15,7 +15,7 @@ Computer Science Engineering Student • AI & Machine Learning Enthusiast • Bu
 #  About Me
 
 -  B.Tech Computer Science Engineering Student
--  Passionate about Artificial Intelligence, Machine Learning and Generative AI
+-  building at the intersection of AI research and software engineering
 -  Exploring Agentic AI, LLMs and Retrieval-Augmented Generation (RAG)
 -  Love building projects that solve real-world problems
 -  Currently learning advanced LangGraph, AI evaluation and production AI systems
