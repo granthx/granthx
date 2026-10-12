@@ -6,7 +6,6 @@ CS Sophomore • AI & Machine Learning Reseacher • Building Intelligent Applic
 
 <p align="center">
   <a href="https://github.com/granthx">
-    <img src="https://komarev.com/ghpvc/?username=granthx&label=Profile%20Views&color=0e75b6&style=for-the-badge" alt="Profile Views"/>
   </a>
 </p>
 
