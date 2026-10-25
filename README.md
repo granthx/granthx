@@ -6,6 +6,11 @@ CS Sophomore • AI & Machine Learning Reseacher • Building Intelligent Applic
 
 <p align="center">
   <a href="https://github.com/granthx">
+    <img
+      src="./assets/blinking-eye.gif"
+      width="600"
+      alt="ASCII Neural Vision Eye streaming code and blinking continuously"
+    />
   </a>
 </p>
 
