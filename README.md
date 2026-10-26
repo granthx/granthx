@@ -8,7 +8,7 @@ CS Sophomore • AI & Machine Learning Reseacher • Building Intelligent Applic
   <a href="https://github.com/granthx">
     <img
       src="./assets/ascii-knight.gif"
-      width="900"
+      width="500"
       alt="ASCII 3D Knight with flowing scarlet cloak and atmospheric rain"
     />
   </a>
