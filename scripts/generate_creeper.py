@@ -1,279 +1,142 @@
-from PIL import Image, ImageDraw, ImageFont
-from pathlib import Path
+"""Generate the authentic Creeper Contribution GIF with crater destruction.
+
+Reverts to the exact original 171-frame two-act Creeper animation:
+- Act 1 (Frames 0-92): Two Creepers meet in the center, High-Five, and explode together.
+  -> In that explosion, all green contribution cells in the blast zone are REMOVED and turned blank/black (22, 27, 34).
+- Act 2 (Frames 93-170): Two Creepers stalk and explode separately on the top-left and bottom-right.
+  -> In those explosions, the green contribution cells in both separate blast zones are REMOVED and turned blank/black.
+- Fireball, smoke puffs, creeper sprites, and 'HIGH FIVE!' text are 100% preserved.
+
+Output:
+    assets/creeper-contribution.gif
+"""
+
 import math
-import random
+from pathlib import Path
+from PIL import Image
 
-W, H = 900, 185
-CELL = 14
-GAP = 4
-COLS = 52
-ROWS = 7
-GRID_X, GRID_Y = 34, 46
-
+ORIG = Path(__file__).resolve().parents[1] / "assets" / "creeper-contribution-orig.gif"
 OUT = Path(__file__).resolve().parents[1] / "assets" / "creeper-contribution.gif"
+OUT_GRANTHX = Path(__file__).resolve().parents[1] / "granthx" / "assets" / "creeper-contribution.gif"
 
-# GitHub-like contribution colors.
-EMPTY = (22, 27, 34)
-LEVELS = [
-    (22, 27, 34),
-    (14, 68, 41),
-    (22, 101, 52),
-    (45, 153, 63),
-    (87, 199, 96),
-]
+EMPTY_CELL = (22, 27, 34)
 
-random.seed(17)
+# Grid Layout
+GRID_X = 34
+GRID_Y = 46
+CELL_SIZE = 14
+CELL_PITCH = 18
+COLS = 47
+ROWS = 7
 
-# A pleasant, mostly-empty contribution history with stronger activity near the right.
-grid = []
-for r in range(ROWS):
-    row = []
-    for c in range(COLS):
-        if c < 18:
-            p = 0.08
-        elif c < 34:
-            p = 0.22
-        else:
-            p = 0.62
-        x = random.random()
-        level = 0 if x > p else random.choices([1, 2, 3, 4], [45, 30, 18, 7])[0]
-        row.append(level)
-    grid.append(row)
+def main():
+    if not ORIG.exists():
+        raise FileNotFoundError(f"Original backup GIF not found at {ORIG}")
 
-def draw_grid(draw):
+    im_orig = Image.open(ORIG)
+    n_frames = im_orig.n_frames
+    duration = im_orig.info.get("duration", 60)
+    print(f"Loaded original GIF: {n_frames} frames, {duration}ms per frame")
+
+    # Step 1: Detect baseline green contribution cells from frame 0
+    im_orig.seek(0)
+    f0 = im_orig.convert("RGB")
+    green_cells = set()
     for r in range(ROWS):
         for c in range(COLS):
-            x = GRID_X + c * (CELL + GAP)
-            y = GRID_Y + r * (CELL + GAP)
-            draw.rounded_rectangle(
-                [x, y, x + CELL, y + CELL],
-                radius=3,
-                fill=LEVELS[grid[r][c]]
-            )
+            x0 = GRID_X + c * CELL_PITCH
+            y0 = GRID_Y + r * CELL_PITCH
+            xc = x0 + 7
+            yc = y0 + 7
+            col = f0.getpixel((xc, yc))
+            # Green check: significantly more green than red/blue
+            if col[1] > col[0] + 15 and col[1] > 45:
+                green_cells.add((r, c))
 
-def draw_creeper_realistic(draw, cx, cy, scale=2, leg_offset=0, flash_progress=0, flip_y=False):
-    def blend(c1, c2, t):
-        return tuple(int(a + (b - a) * t) for a, b in zip(c1, c2))
-    
-    g = blend((77, 184, 72), (255, 255, 255), flash_progress)
-    d = blend((28, 86, 39), (255, 255, 255), flash_progress)
-    b = blend((13, 38, 22), (255, 255, 255), flash_progress)
+    print(f"Total baseline green contribution cells: {len(green_cells)}")
 
-    def draw_rect(x1, y1, x2, y2, fill):
-        if flip_y:
-            y1_flip = cy + (cy - y2)
-            y2_flip = cy + (cy - y1)
-            y1, y2 = y1_flip, y2_flip
-        draw.rectangle([x1, y1, x2, y2], fill=fill)
+    # Step 2: Define blast zones
+    # Act 1 Explosion: Center (449.0, 85.0), radius ~80px
+    act1_destroyed = set()
+    for (r, c) in green_cells:
+        xc = GRID_X + c * CELL_PITCH + 7
+        yc = GRID_Y + r * CELL_PITCH + 7
+        if math.hypot(xc - 449.0, yc - 85.0) <= 80.0:
+            act1_destroyed.add((r, c))
 
-    # Body
-    body_w = 8 * scale
-    body_h = 12 * scale
-    bx = cx - body_w / 2
-    by = cy - 6 * scale - body_h
-    
-    draw_rect(bx, by, bx + body_w, by + body_h - 1, fill=g)
-    for i in range(4):
-        for j in range(6):
-            if (i + j) % 3 == 0:
-                draw_rect(bx + i * 2 * scale, by + j * 2 * scale, bx + (i + 1) * 2 * scale - 1, by + (j + 1) * 2 * scale - 1, fill=d)
+    # Act 2 Explosions:
+    # Top-Left: (149.5, 49.0), radius ~75px
+    # Bottom-Right: (749.5, 142.5), radius ~78px
+    act2_destroyed = set()
+    for (r, c) in green_cells:
+        xc = GRID_X + c * CELL_PITCH + 7
+        yc = GRID_Y + r * CELL_PITCH + 7
+        d_left = math.hypot(xc - 149.5, yc - 49.0)
+        d_right = math.hypot(xc - 749.5, yc - 142.5)
+        if d_left <= 75.0 or d_right <= 78.0:
+            act2_destroyed.add((r, c))
 
-    # Legs
-    leg_w = 4 * scale
-    leg_h = 6 * scale
-    
-    for i in [-1, 1]:
-        lx = cx + i * (leg_w/2) - leg_w/2
-        ly = cy - 6 * scale
-        offset = -leg_offset if i == -1 else leg_offset
-        draw_rect(lx + offset, ly, lx + offset + leg_w - 1, ly + leg_h - 1, fill=d)
-        
-    for i in [-1, 1]:
-        lx = cx + i * (leg_w/2 + 2 * scale) - leg_w/2
-        ly = cy - 6 * scale
-        offset = leg_offset if i == -1 else -leg_offset
-        draw_rect(lx + offset, ly, lx + offset + leg_w - 1, ly + leg_h - 1, fill=g)
+    print(f"Act 1 crater destroyed green cells: {len(act1_destroyed)}")
+    print(f"Act 2 craters destroyed green cells: {len(act2_destroyed)}")
 
-    # Head
-    head_w = 8 * scale
-    head_h = 8 * scale
-    hx = cx - head_w / 2
-    hy = by - head_h
-    draw_rect(hx, hy, hx + head_w - 1, hy + head_h - 1, fill=g)
-    
-    # Face
-    eye_size = 2 * scale
-    draw_rect(hx + scale, hy + 2 * scale, hx + scale + eye_size - 1, hy + 2 * scale + eye_size - 1, fill=b)
-    draw_rect(hx + 5 * scale, hy + 2 * scale, hx + 5 * scale + eye_size - 1, hy + 2 * scale + eye_size - 1, fill=b)
-    
-    draw_rect(hx + 3 * scale, hy + 4 * scale, hx + 5 * scale - 1, hy + 7 * scale - 1, fill=b)
-    draw_rect(hx + 2 * scale, hy + 5 * scale, hx + 3 * scale - 1, hy + 8 * scale - 1, fill=b)
-    draw_rect(hx + 5 * scale, hy + 5 * scale, hx + 6 * scale - 1, hy + 8 * scale - 1, fill=b)
+    processed_frames = []
 
-def draw_boom(draw, cx, cy, progress, rng, multiplier=1.0):
-    if progress <= 0: return
-    radius = 180 * math.pow(progress, 0.4) * multiplier
-    
-    if progress < 0.15:
-        s = int(300 * (1 - progress / 0.15) * multiplier)
-        draw.ellipse([cx - s, cy - s, cx + s, cy + s], fill=(255, 255, 255))
-        return
+    for f in range(n_frames):
+        im_orig.seek(f)
+        frame_rgb = im_orig.convert("RGB")
 
-    if progress < 0.6:
-        width = max(1, int(15 * (1 - progress / 0.6)))
-        draw.ellipse([cx - radius, cy - radius, cx + radius, cy + radius], outline=(255, 200, 100), width=width)
+        # Determine which cells are destroyed at frame f:
+        # Act 1 explosion triggers at frame 62 and persists
+        # Act 2 separate explosions trigger at frame 152 and persist
+        active_destroyed = set()
+        if 62 <= f < 93:
+            active_destroyed = act1_destroyed
+        elif f >= 93:
+            # During Act 2, Act 1 crater remains destroyed, and at f >= 152 Act 2 craters also get destroyed
+            active_destroyed = set(act1_destroyed)
+            if f >= 152:
+                active_destroyed.update(act2_destroyed)
 
-    count = int(120 * multiplier)
-    for i in range(count):
-        ang = 2 * math.pi * i / count + rng.uniform(-0.2, 0.2)
-        dist = radius * rng.uniform(0.05, 1.1) * (1 - progress * 0.2)
-        px = cx + math.cos(ang) * dist
-        py = cy + math.sin(ang) * dist
-        
-        size = rng.uniform(4, 20) * (1 - progress) * multiplier
-        if size < 1: continue
-        
-        if progress < 0.3:
-            col = random.choice([(255, 255, 200), (255, 150, 50), (200, 50, 0)])
-        else:
-            col = random.choice([(120, 120, 120), (80, 80, 80), (40, 40, 40)])
-            
-        draw.ellipse([px - size, py - size, px + size, py + size], fill=col)
+        if active_destroyed:
+            pix = frame_rgb.load()
+            for (r, c) in active_destroyed:
+                x0 = GRID_X + c * CELL_PITCH
+                y0 = GRID_Y + r * CELL_PITCH
+                for yy in range(y0, y0 + CELL_SIZE + 1):
+                    for xx in range(x0, x0 + CELL_SIZE + 1):
+                        color = pix[xx, yy]
+                        # Check if pixel is a green contribution pixel:
+                        # (Leave fireballs, explosion rings, smoke, and creeper sprites intact)
+                        is_green_pixel = (
+                            color[1] > color[0] + 12 and
+                            color[1] > color[2] + 10 and
+                            color[0] < 120 and
+                            color[2] < 120
+                        )
+                        if is_green_pixel:
+                            pix[xx, yy] = EMPTY_CELL
 
-def get_separate_creeper_state(frame, start_x, end_x, y, is_top=False):
-    cx = start_x
-    cy = y
-    leg_offset = 0
-    scale = 2 
-    flash_progress = 0
-    progress_boom = 0
+        processed_frames.append(frame_rgb)
 
-    if frame < 70:
-        if frame < 30:
-            cx = start_x + ((end_x - start_x) * 0.35 / 30) * frame
-            leg_offset = 3 * math.sin(frame * 1.5)
-        elif frame < 45:
-            t = (frame - 30) / 15
-            dist = (end_x - start_x) * 0.5
-            cx = start_x + (end_x - start_x) * 0.35 + dist * t
-            jump_h = 30 * math.sin(t * math.pi)
-            if is_top: cy = y + jump_h
-            else: cy = y - jump_h
-            leg_offset = -2
-        else:
-            t = (frame - 45) / 15
-            dist = (end_x - start_x) * 0.15
-            cx = start_x + (end_x - start_x) * 0.85 + dist * t
-            leg_offset = 3 * math.sin(frame * 1.5) * (1 - t)
+    print("Quantizing and saving GIF...")
+    # Quantize to adaptive palette with transparency/loop preservation
+    palette_frames = [f.convert("P", palette=Image.Palette.ADAPTIVE, colors=64) for f in processed_frames]
 
-        if frame >= 60:
-            charge_t = (frame - 60) / 10
-            flash_progress = charge_t
-            scale = 2 + charge_t * 0.5
-            cx += random.randint(-2, 2)
-            cy += random.randint(-2, 2)
-            leg_offset = 0
-    else:
-        cx = end_x
-        progress_boom = (frame - 70) / 20
+    palette_frames[0].save(
+        OUT,
+        save_all=True,
+        append_images=palette_frames[1:],
+        duration=duration,
+        loop=0,
+        optimize=True
+    )
+    size_mb = OUT.stat().st_size / (1024 * 1024)
+    print(f"Successfully generated {OUT} ({size_mb:.2f} MB)")
 
-    return cx, cy, scale, leg_offset, flash_progress, progress_boom
+    if OUT_GRANTHX.parent.exists():
+        import shutil
+        shutil.copy2(OUT, OUT_GRANTHX)
+        print(f"Copied to {OUT_GRANTHX}")
 
-
-frames = []
-rng = random.Random(42)
-FPS = 15
-TOTAL_FRAMES = 180 # 90 frames for high-five + 90 frames for separate explosions
-
-ground_y_bottom = GRID_Y + ROWS * (CELL + GAP) - 4
-ground_y_top = GRID_Y - 14
-center_y = (ground_y_bottom + ground_y_top) / 2
-
-for full_frame in range(TOTAL_FRAMES):
-    img = Image.new("RGB", (W, H), (9, 13, 18))
-    d = ImageDraw.Draw(img)
-    
-    draw_grid(d)
-
-    if full_frame < 90:
-        # --- PART 1: HIGH FIVE SEQUENCE (Frames 0-89) ---
-        frame = full_frame
-        
-        scale_b = scale_t = 2
-        flash_b = flash_t = 0
-        boom = 0
-        
-        if frame < 30:
-            t = frame / 30
-            cx_b = 150 + (320 - 150) * t
-            cy_b = ground_y_bottom
-            leg_offset_b = 4 * math.sin(frame * 1.5)
-            
-            cx_t = 750 - (750 - 580) * t
-            cy_t = ground_y_top
-            leg_offset_t = 4 * math.sin(frame * 1.5)
-            
-        elif frame < 45:
-            t = (frame - 30) / 15
-            cx_b = 320 + (435 - 320) * t
-            cy_b = ground_y_bottom - (ground_y_bottom - center_y - 12) * t - 30 * math.sin(t * math.pi)
-            leg_offset_b = -3
-
-            cx_t = 580 - (580 - 465) * t
-            cy_t = ground_y_top + (center_y - 12 - ground_y_top) * t + 30 * math.sin(t * math.pi)
-            leg_offset_t = -3
-
-        elif frame < 70:
-            cx_b = 435; cy_b = center_y + 12; leg_offset_b = 0
-            cx_t = 465; cy_t = center_y - 12; leg_offset_t = 0
-            
-            if frame < 60:
-                bounce = math.sin((frame - 45) / 15 * math.pi) * 3
-                d.text((450 - 40, center_y - 30 - bounce), "HIGH FIVE!", fill=(255, 215, 0))
-            else:
-                charge_t = (frame - 60) / 10
-                flash_b = flash_t = charge_t
-                scale_b = scale_t = 2 + charge_t * 0.5
-                cx_b += random.randint(-2, 2); cy_b += random.randint(-2, 2)
-                cx_t += random.randint(-2, 2); cy_t += random.randint(-2, 2)
-        else:
-            boom = (frame - 70) / 20
-
-        if frame < 70:
-            draw_creeper_realistic(d, cx_b, cy_b, scale=scale_b, leg_offset=leg_offset_b, flash_progress=flash_b, flip_y=False)
-            draw_creeper_realistic(d, cx_t, cy_t, scale=scale_t, leg_offset=leg_offset_t, flash_progress=flash_t, flip_y=True)
-        else:
-            draw_boom(d, 450, center_y, boom, rng, multiplier=1.5)
-
-    else:
-        # --- PART 2: SEPARATE BOOMS SEQUENCE (Frames 90-179) ---
-        frame = full_frame - 90
-
-        # Bottom Creeper
-        cx_b, cy_b, scale_b, leg_offset_b, flash_b, boom_b = get_separate_creeper_state(
-            frame, start_x=100, end_x=750, y=ground_y_bottom, is_top=False)
-        if frame < 70:
-            draw_creeper_realistic(d, cx_b, cy_b, scale=scale_b, leg_offset=leg_offset_b, flash_progress=flash_b, flip_y=False)
-        else:
-            draw_boom(d, cx_b, cy_b, boom_b, rng, multiplier=0.7)
-
-        # Top Creeper
-        cx_t, cy_t, scale_t, leg_offset_t, flash_t, boom_t = get_separate_creeper_state(
-            frame, start_x=800, end_x=150, y=ground_y_top, is_top=True)
-        if frame < 70:
-            draw_creeper_realistic(d, cx_t, cy_t, scale=scale_t, leg_offset=leg_offset_t, flash_progress=flash_t, flip_y=True)
-        else:
-            draw_boom(d, cx_t, cy_t, boom_t, rng, multiplier=0.7)
-
-    frames.append(img)
-
-OUT.parent.mkdir(parents=True, exist_ok=True)
-frames[0].save(
-    OUT,
-    save_all=True,
-    append_images=frames[1:],
-    duration=int(1000/FPS),
-    loop=0,
-    optimize=False,
-)
-print(f"Generated {OUT}")
+if __name__ == "__main__":
+    main()
